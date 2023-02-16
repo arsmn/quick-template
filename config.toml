@@ -1,0 +1,8 @@
+[API]
+    Port = ""
+[SQL]
+    DSN = ""
+[Redis]
+    Addr = ""
+    Password = ""
+    Database = 0

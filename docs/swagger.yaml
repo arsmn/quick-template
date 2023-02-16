@@ -1,0 +1,273 @@
+basePath: /
+definitions:
+  api.DefaultError:
+    properties:
+      code:
+        type: integer
+      debug:
+        type: string
+      details:
+        additionalProperties: true
+        type: object
+      id:
+        type: string
+      message:
+        type: string
+      reason:
+        type: string
+      request:
+        type: string
+      status:
+        type: string
+    type: object
+  api.PayloadResponse-models_GetWalletResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        properties:
+          balance:
+            type: number
+          id:
+            type: integer
+          user_id:
+            type: integer
+        type: object
+      status:
+        type: string
+    type: object
+  api.PayloadResponse-models_SigninResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        properties:
+          expires_at:
+            type: string
+          token:
+            type: string
+        type: object
+      status:
+        type: string
+    type: object
+  api.Response:
+    properties:
+      code:
+        type: integer
+      status:
+        type: string
+    type: object
+  models.CreditWalletRequest:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+    type: object
+  models.DebitWalletRequest:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+    type: object
+  models.SigninRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.SignupRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a test case for quicktmp
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: quicktmp
+  version: "1.0"
+paths:
+  /users/signin:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates user and creates a new session
+      parameters:
+      - description: payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SigninRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.PayloadResponse-models_SigninResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+      summary: Signin user
+      tags:
+      - signin
+  /users/signup:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+      summary: Signup user
+      tags:
+      - signup
+  /wallets/{wallet_id}/balance:
+    get:
+      description: Retrieves the balance of a given wallet id
+      parameters:
+      - description: Wallet ID
+        in: path
+        name: wallet_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.PayloadResponse-models_GetWalletResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+      summary: Get Wallet Balance
+      tags:
+      - balance
+  /wallets/{wallet_id}/credit:
+    post:
+      consumes:
+      - application/json
+      description: Credits money on a given wallet id
+      parameters:
+      - description: Wallet ID
+        in: path
+        name: wallet_id
+        required: true
+        type: integer
+      - description: payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreditWalletRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+      summary: Credit wallet balance
+      tags:
+      - credit
+  /wallets/{wallet_id}/debit:
+    post:
+      consumes:
+      - application/json
+      description: Debits money from a given wallet id
+      parameters:
+      - description: Wallet ID
+        in: path
+        name: wallet_id
+        required: true
+        type: integer
+      - description: payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.DebitWalletRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.DefaultError'
+      summary: Debit wallet balance
+      tags:
+      - debit
+swagger: "2.0"
